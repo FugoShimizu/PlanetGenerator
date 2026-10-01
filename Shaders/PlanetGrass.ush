@@ -1,0 +1,36 @@
+struct PlanetGrassSeasons {
+	/**
+	 * 草の根の位置に対応する季節被覆を読む
+	 * @param Atlas 季節配列
+	 * @param AtlasSampler 線形補間
+	 * @param Coordinate 経度と余緯度
+	 * @param Layer 季節の番号
+	 * @return 草・枯草・落葉・雪の四成分
+	 */
+	float4 Read(Texture2D Atlas, SamplerState AtlasSampler, float2 Coordinate, float Layer) {
+		// 追加された樹種の層も含む実寸を使い，別の季節の行を読まない
+		uint2 Dimensions;
+		Atlas.GetDimensions(Dimensions.x, Dimensions.y);
+		float2 UV = float2(Coordinate.x, (Layer * 65 + Coordinate.y * 64 + 0.5) / Dimensions.y);
+		// 地点と季節の被覆の返戻
+		return Texture2DSampleLevel(Atlas, AtlasSampler, UV, 0);
+	}
+};
+// カメラとの差分は材質節点で倍精度の座標を引いてから受け取る
+float DistanceToNearCenter = length(ViewRelative - NearCenterRelative.xyz);
+RenderMask = InstanceFade * (1 - smoothstep(max(0, NearRadius - 200), max(1, NearRadius), DistanceToNearCenter));
+float3 Direction = normalize(Radial);
+float2 Coordinate = float2(atan2(Direction.y, Direction.x) * 0.159154943091895 + 0.5,
+	acos(clamp(Direction.z, -1, 1)) * 0.318309886183791);
+float Year = frac(SolarYearPhase) * 12, First = floor(Year), Second = fmod(First + 1, 12), Fraction = frac(Year);
+float Blend = Fraction * Fraction * Fraction * (10 + Fraction * (-15 + 6 * Fraction));
+PlanetGrassSeasons Seasons;
+float4 Cover = lerp(Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, First),
+	Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, Second), Blend);
+float Greenness = Cover.x / max(Cover.x + Cover.y, 0.001);
+float3 Base = lerp(float3(0.32, 0.22, 0.08), float3(0.055, 0.14, 0.018), Greenness);
+float Vein = 0.9 + 0.1 * cos(UV.x * 75.3982237);
+float Rib = 0.85 + 0.15 * exp(-60 * (UV.x - 0.5) * (UV.x - 0.5));
+Base *= Vein * Rib * lerp(0.5, 1.15, saturate(UV.y)) * lerp(0.8, 1.2, Variation);
+// 季節では形状を変えず，被覆に対応した色の返戻
+return lerp(Base, float3(0.78, 0.82, 0.86), saturate(Cover.a));

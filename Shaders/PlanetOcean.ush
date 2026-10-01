@@ -1,0 +1,28 @@
+// Normal-only waves: no change to the constant spherical base water level.
+float3 L=LocalPosition.xyz*0.01;
+float3 P=TextureOrigin.xyz+TextureAxisX.xyz*L.x+TextureAxisY.xyz*L.y+TextureAxisZ.xyz*L.z;
+float3 N=normalize(float3(UV2.xy,UV3.x));
+float K=0.01227184630308513; // 2 pi / 512 m, matching the C++ phase period.
+// Eight decorrelated modes; integer vectors preserve the 512 m origin phase.
+// Temporal harmonics approximate deep-water dispersion at the reference
+// wave-vector lengths, then repeat after 64 s. This spherical normal field
+// is an appearance model, not a shallow-water or global fluid simulation.
+const float3 Modes[8]={float3(37,11,19),float3(59,26,13),float3(83,47,-17),float3(127,23,71),
+                      float3(191,101,-41),float3(283,-73,137),float3(389,211,53),float3(557,97,-233)};
+const float Strength[8]={0.060,0.045,0.035,0.028,0.022,0.017,0.012,0.009};
+const float Cycles[8]={23,29,35,43,52,63,75,87};
+const float Phase[8]={1.17,4.31,2.03,5.79,0.47,3.61,2.87,5.13};
+float3 Dx=ddx(P),Dy=ddy(P),Slope=0;
+[unroll] for(int I=0;I<8;++I)
+{
+    float3 WaveVector=K*Modes[I];
+    float PixelPhase=max(abs(dot(WaveVector,Dx)),abs(dot(WaveVector,Dy)));
+    float Filter=1-smoothstep(1.0,3.141592653589793,PixelPhase);
+    Slope+=Strength[I]*normalize(WaveVector)*cos(dot(WaveVector,P)-Clock*0.098174770424681*Cycles[I]+Phase[I])*Filter;
+}
+float3 Shaded=normalize(N-(Slope-N*dot(Slope,N)));
+float3 T;
+if(N.z < -0.999999) T=normalize(float3(N.x*N.y,-1+N.y*N.y,N.z*N.y));
+else { float A=1/(1+N.z); T=normalize(float3(1-N.x*N.x*A,-N.x*N.y*A,-N.x)); }
+float3 Bn=normalize(cross(N,T));
+return normalize(float3(dot(Shaded,T),dot(Shaded,Bn),dot(Shaded,N)));

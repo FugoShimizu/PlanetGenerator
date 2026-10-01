@@ -1,0 +1,67 @@
+[
+	{
+		"asset": "leafy_grass",
+		"map": "diff",
+		"path": "SourceAssets/SeasonalTextures/leafy_grass_diff.jpg",
+		"url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leafy_grass/leafy_grass_diff_1k.jpg",
+		"bytes": 1195394,
+		"sha256": "cfa40bc9d9417d1852db8753a8d5917f110c40101179f63543c382e39bc05e4a",
+		"source_page": "https://polyhaven.com/a/leafy_grass",
+		"author": "Charlotte Baglioni",
+		"license": "CC0-1.0",
+		"license_url": "https://polyhaven.com/license",
+		"resolution": "1k"
+	},
+	{
+		"asset": "leafy_grass",
+		"map": "nor_dx",
+		"path": "SourceAssets/SeasonalTextures/leafy_grass_nor_dx.jpg",
+		"url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leafy_grass/leafy_grass_nor_dx_1k.jpg",
+		"bytes": 1467205,
+		"sha256": "333befd124e76c0686dfeb32d5bdfa0c80f38aa25193a12e6d6f9b5efa5bfdc8",
+		"source_page": "https://polyhaven.com/a/leafy_grass",
+		"author": "Charlotte Baglioni",
+		"license": "CC0-1.0",
+		"license_url": "https://polyhaven.com/license",
+		"resolution": "1k"
+	},
+	{
+		"asset": "leafy_grass",
+		"map": "arm",
+		"path": "SourceAssets/SeasonalTextures/leafy_grass_arm.jpg",
+		"url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leafy_grass/leafy_grass_arm_1k.jpg",
+		"bytes": 1010081,
+		"sha256": "95432451cb2693794459fe7ea339ea9ffdb5959c40373740f80a4aa1703f089d",
+		"source_page": "https://polyhaven.com/a/leafy_grass",
+		"author": "Charlotte Baglioni",
+		"license": "CC0-1.0",
+		"license_url": "https://polyhaven.com/license",
+		"resolution": "1k"
+	},
+	{
+		"asset": "forrest_ground_01",
+		"map": "diff",
+		"path": "SourceAssets/SeasonalTextures/forrest_ground_01_diff.jpg",
+		"url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_diff_1k.jpg",
+		"bytes": 833711,
+		"sha256": "3dd6875cb3908e022a3c45ebbffa5e84c670ff2691fbbb6dc9ea4bff88523800",
+		"source_page": "https://polyhaven.com/a/forrest_ground_01",
+		"author": "Rob Tuytel",
+		"license": "CC0-1.0",
+		"license_url": "https://polyhaven.com/license",
+		"resolution": "1k"
+	},
+	{
+		"asset": "forrest_ground_03",
+		"map": "diff",
+		"path": "SourceAssets/SeasonalTextures/forrest_ground_03_diff.jpg",
+		"url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_03/forrest_ground_03_diff_1k.jpg",
+		"bytes": 821191,
+		"sha256": "69c3ae8a40c70eecbb312c2ca1044b5dea4f48d37f2a6f84ca7ed56b95f04a7b",
+		"source_page": "https://polyhaven.com/a/forrest_ground_03",
+		"author": "Rob Tuytel",
+		"license": "CC0-1.0",
+		"license_url": "https://polyhaven.com/license",
+		"resolution": "1k"
+	}
+]

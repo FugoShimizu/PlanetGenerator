@@ -1,0 +1,124 @@
+// 素材の投影座標を，再基準化した原点から惑星固定のメートル座標へ復元する．
+struct PlanetTexture {
+	/**
+	 * 物理量の補間後に，端点の二階微分迄連続な被覆率を求める
+	 * @param A 遷移の下端
+	 * @param B 遷移の上端
+	 * @param X 補間した物理量
+	 * @return 零から一迄の被覆率
+	 */
+	float Transition(float A, float B, float X) {
+		float T = saturate((X - A) / (B - A));
+		// 地点評価と同じ五次遷移の返戻
+		return T * T * T * (10 + T * (-15 + 6 * T));
+	}
+
+	/**
+	 * 惑星固定の三軸投影で素材の三成分を混合する
+	 * @param T 素材の画像
+	 * @param S 画像の標本化設定
+	 * @param P 周期を含む素材座標
+	 * @param W 各投影軸の混合率
+	 * @param Sign 各軸の表裏
+	 * @return 三軸の混合値
+	 */
+	float3 Read(Texture2D T, SamplerState S, float3 P, float3 W, float3 Sign) {
+		// 共通の座標位相を保つ三軸標本の返戻
+		return Texture2DSample(T, S, float2(P.y * Sign.x, P.z)).rgb * W.x +
+			Texture2DSample(T, S, float2(P.z * Sign.y, P.x)).rgb * W.y +
+			Texture2DSample(T, S, float2(P.x * Sign.z, P.y)).rgb * W.z;
+	}
+
+	/**
+	 * 小さく投影された色模様を，元画像の最粗ミップへ連続に平均化する
+	 * @param T 色の画像
+	 * @param S 色空間と標本化の設定
+	 * @param P 周期を含む素材座標
+	 * @param W 各投影軸の混合率
+	 * @param Sign 各軸の表裏
+	 * @return 近景の細部と遠景の線形平均色を混合した色
+	 */
+	float3 ReadColor(Texture2D T, SamplerState S, float3 P, float3 W, float3 Sign) {
+		float3 Color = Read(T, S, P, W, Sign);
+		float Footprint = max(length(ddx(P)), length(ddy(P)));
+		float Blend = smoothstep(1.0 / 64.0, 1.0 / 8.0, Footprint);
+		// 最大１Ｋの元画像では最終ミップへ制限され，色空間変換も通常の読取と共通
+		float3 Mean = Texture2DSampleLevel(T, S, float2(0.5, 0.5), 16).rgb;
+		// 画像の周期が８～６４画素へ縮小する範囲での連続な平均化結果の返戻
+		return lerp(Color, Mean, Blend);
+	}
+
+	/**
+	 * 三軸の法線画像を惑星軸の勾配へ変換する
+	 * @param T 接空間の法線画像
+	 * @param S 法線の標本化設定
+	 * @param P 周期を含む素材座標
+	 * @param W 各投影軸の混合率
+	 * @param Sign 各軸の表裏
+	 * @return 惑星軸で合成した勾配
+	 */
+	float3 Bump(Texture2D T, SamplerState S, float3 P, float3 W, float3 Sign) {
+		float2 A = Texture2DSample(T, S, float2(P.y * Sign.x, P.z)).rg * 2 - 1;
+		float2 B = Texture2DSample(T, S, float2(P.z * Sign.y, P.x)).rg * 2 - 1;
+		float2 C = Texture2DSample(T, S, float2(P.x * Sign.z, P.y)).rg * 2 - 1;
+		A /= max(0.3, sqrt(saturate(1 - dot(A, A))));
+		B /= max(0.3, sqrt(saturate(1 - dot(B, B))));
+		C /= max(0.3, sqrt(saturate(1 - dot(C, C))));
+		// 各投影軸を同じ惑星軸へ戻した勾配の返戻
+		return float3(0, A.x * Sign.x, A.y) * W.x + float3(B.y, 0, B.x * Sign.y) * W.y +
+			float3(C.x * Sign.z, C.y, 0) * W.z;
+	}
+};
+
+PlanetTexture F;
+float3 Local = LocalPosition.xyz * 0.01;
+float3 P = TextureOrigin.xyz + TextureAxisX.xyz * Local.x + TextureAxisY.xyz * Local.y + TextureAxisZ.xyz * Local.z;
+float3 N = normalize(float3(UV2.xy, UV3.x));
+float3 Sign = float3(N.x < 0 ? -1 : 1, N.y < 0 ? -1 : 1, N.z < 0 ? -1 : 1);
+float3 W = pow(abs(N), 4);
+W /= max(dot(W, 1), 0.0001);
+float3 Layers = max(Masks.rgb, 0);
+Layers /= max(dot(Layers, 1), 0.0001);
+float Wet = saturate(Wetness);
+if(FlowHydrologyEnabled > 0.5) {
+	float Marine = F.Transition(-0.15, 0.1, -UV0.x);
+	float River = saturate(UV1.x * 10) * F.Transition(-0.05, 0.15, UV0.y);
+	float Littoral = (1 - F.Transition(1.5, 4, UV0.x)) * (1 - F.Transition(20, 80, -UV0.x));
+	float Sand = (1 - Layers.x) * saturate(Littoral + (1 - Littoral) * River * 0.65);
+	Layers = float3(Layers.x, Sand, 1 - Layers.x - Sand);
+	Wet = 1 - (1 - Marine) * (1 - River);
+}
+float3 UV = P * 0.5;
+// 32 m の風紋は 512 m の再基準化周期に１６回収まり，表示区画の継ぎ目で位相が変わらない．
+float3 RippleUV = P * (1.0 / 32.0);
+float3 SandBase = F.ReadColor(SandColor, SandColorSampler, UV, W, Sign);
+float3 RippleBase = F.ReadColor(SandRippleColor, SandRippleColorSampler, RippleUV, W, Sign);
+float DrySand = 1 - smoothstep(0.08, 0.5, Wet);
+float RippleLuminance = dot(RippleBase, float3(0.2126, 0.7152, 0.0722));
+float RippleTone = clamp(1 + 7 * (RippleLuminance - 0.25), 0.75, 1.25);
+float3 WindSandBase = SandBase * lerp(1, RippleTone, DrySand);
+float3 Base = F.ReadColor(RockColor, RockColorSampler, UV, W, Sign) * Layers.x + WindSandBase * Layers.y +
+	F.ReadColor(SoilColor, SoilColorSampler, UV, W, Sign) * Layers.z;
+float3 ARM = F.Read(RockArm, RockArmSampler, UV, W, Sign) * Layers.x +
+	F.Read(SandArm, SandArmSampler, UV, W, Sign) * Layers.y +
+	F.Read(SoilArm, SoilArmSampler, UV, W, Sign) * Layers.z;
+float3 SandDelta = F.Bump(SandNormal, SandNormalSampler, RippleUV, W, Sign);
+float3 SoilDelta = F.Bump(SoilNormal, SoilNormalSampler, UV, W, Sign);
+float3 Delta = F.Bump(RockNormal, RockNormalSampler, UV, W, Sign) * Layers.x +
+	SandDelta * Layers.y + SoilDelta * Layers.z;
+float Footprint = max(length(ddx(P)), length(ddy(P)));
+float Detail = 1 - smoothstep(0.08, 0.5, Footprint);
+float3 Shaded = normalize(N + 0.35 * Detail * (Delta - N * dot(Delta, N)));
+float3 Tangent;
+if(N.z < -0.999999) {
+	Tangent = normalize(float3(N.x * N.y, -1 + N.y * N.y, N.z * N.y));
+} else {
+	float A = 1 / (1 + N.z);
+	Tangent = normalize(float3(1 - N.x * N.x * A, -N.x * N.y * A, -N.x));
+}
+float3 Bitangent = normalize(cross(N, Tangent));
+SurfaceNormal = normalize(float3(dot(Shaded, Tangent), dot(Shaded, Bitangent), dot(Shaded, N)));
+SurfaceRoughness = clamp(ARM.g * lerp(1, 0.7, Wet), 0.35, 1);
+SurfaceOcclusion = lerp(1, ARM.r, 0.45 * Detail);
+// 地表分類・湿潤度を保つ最終色の返戻
+return saturate(Base * lerp(1, 0.64, Wet));

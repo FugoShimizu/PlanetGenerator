@@ -1,0 +1,23 @@
+// 大気散乱・太陽円盤に，恒星時で回る星空と実際の方向に照らされた月面を合成する
+const float Pi = 3.141592653589793;
+const float3 Ray = normalize(-ViewToCamera);
+const float3 Equatorial = float3(dot(Ray, StarAxisX), dot(Ray, StarAxisY), dot(Ray, StarAxisZ));
+const float2 StarUv = float2(atan2(Equatorial.y, Equatorial.x) / (2 * Pi) + 0.5, acos(clamp(Equatorial.z, -1, 1)) / Pi);
+const float3 Stars = pow(Texture2DSample(StarMap, StarMapSampler, StarUv * 8).rgb, 2) * 0.06;
+const float2 MoonPlane = float2(dot(Ray, MoonRight), dot(Ray, MoonUp)) / max(MoonSinRadius, 1e-6);
+const float RadiusSquared = dot(MoonPlane, MoonPlane);
+const float EdgeWidth = max(fwidth(RadiusSquared), 1e-5);
+const float Disc = (1 - smoothstep(1 - EdgeWidth, 1 + EdgeWidth, RadiusSquared)) * step(0, dot(Ray, MoonDirection));
+float3 Moon = 0;
+if(Disc > 0) {
+	const float2 Plane = MoonPlane / max(1, sqrt(RadiusSquared));
+	const float Facing = sqrt(saturate(1 - dot(Plane, Plane)));
+	const float3 Normal = MoonRight * Plane.x + MoonUp * Plane.y - MoonDirection * Facing;
+	const float2 MoonUv = float2(atan2(Plane.x, Facing) / (2 * Pi) + 0.5, acos(clamp(Plane.y, -1, 1)) / Pi);
+	const float3 Albedo = Texture2DSample(MoonMap, MoonMapSampler, MoonUv).rgb;
+	Moon = Albedo * saturate(dot(Normal, MoonToSun)) * 2000;
+}
+const float VisibleSky = step(HorizonCos, dot(Ray, ObserverUp));
+const float3 Background = lerp(Stars, Moon, Disc) * saturate(Aerial.a) * VisibleSky;
+// 大気散乱を前景に残した天球輝度の返戻
+return max(0, SkyLuminance + SunDisc * (1 - Disc) + Background);

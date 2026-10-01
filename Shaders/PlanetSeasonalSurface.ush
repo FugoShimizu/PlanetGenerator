@@ -1,0 +1,67 @@
+// 共通の地表シェーダーの返戻直前へ挿入する季節被覆
+// 地点は惑星の局所座標から求め，法線の傾きで気候の参照位置を変えない
+struct PlanetSeasonalSampler {
+	/**
+	 * 経度周期と極点を保って一層を読む
+	 * @param Atlas 季節配列
+	 * @param AtlasSampler 線形補間
+	 * @param Coordinate 経度と余緯度
+	 * @param Layer 季節と属性の層番号
+	 * @return 地表被覆の四成分
+	 */
+	float4 Read(Texture2D Atlas, SamplerState AtlasSampler, float2 Coordinate, float Layer) {
+		float2 SampleCoordinate = float2(Coordinate.x, (Layer * 65 + Coordinate.y * 64 + 0.5) / 1625);
+		// 配列の隣の層へ跨がない線形標本の返戻
+		return Texture2DSampleLevel(Atlas, AtlasSampler, SampleCoordinate, 0);
+	}
+};
+if(ClimateEnabled > 0.5) {
+	float3 RelativePosition = TextureAxisX.xyz * Local.x + TextureAxisY.xyz * Local.y + TextureAxisZ.xyz * Local.z;
+	float3 Radial = normalize(ClimatePlanetOffset.xyz + RelativePosition * ClimateInverseRadius);
+	float2 Coordinate = float2(atan2(Radial.y, Radial.x) * 0.159154943091895 + 0.5,
+		acos(clamp(Radial.z, -1, 1)) * 0.318309886183791);
+	float Year = frac(SolarYearPhase) * 12;
+	float First = floor(Year), Second = fmod(First + 1, 12), Fraction = frac(Year);
+	float Blend = Fraction * Fraction * Fraction * (10 + Fraction * (-15 + 6 * Fraction));
+	PlanetSeasonalSampler Seasons;
+	float4 Cover = lerp(Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, First),
+		Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, Second), Blend);
+	float4 Factors = lerp(Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, First + 12),
+		Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, Second + 12), Blend);
+	float ConiferShare = saturate(Seasons.Read(ClimateAtlas, ClimateAtlasSampler, Coordinate, 24).x);
+	float Land = 1 - Wet;
+	float Alignment = saturate(dot(N, Radial));
+	float Slope = sqrt(saturate(1 - Alignment * Alignment)) / max(Alignment, 0.001);
+	float Snow = Cover.a * Land * (1 - smoothstep(0.5, 1.2, Slope));
+	float Ice = Factors.x * Land * (1 - smoothstep(0.5, 1.2, Slope));
+	float Desert = saturate(Factors.z) * 0.85 * Land;
+	float3 Organic = max(Cover.rgb, 0) * Layers.z * Land * (1 - Desert);
+	float GrassWeight = Organic.x + Organic.y, LitterWeight = Organic.z;
+	float3 SoilBase = F.ReadColor(SoilColor, SoilColorSampler, UV, W, Sign);
+	Base += (WindSandBase - SoilBase) * Layers.z * Desert;
+	float3 GrassBase = F.ReadColor(GrassColor, GrassColorSampler, UV, W, Sign);
+	float3 GreenBase = GrassBase * float3(0.38, 0.78, 0.34);
+	float GrassLuminance = dot(GrassBase, float3(0.2126, 0.7152, 0.0722));
+	float3 DryBase = GrassLuminance * float3(1.35, 1.06, 0.62);
+	float3 BroadleafLitter = F.ReadColor(LitterColor,
+		GetMaterialSharedSampler(LitterColorSampler, View.SharedBilinearWrappedSampler), UV, W, Sign);
+	float3 NeedleLitter = F.ReadColor(NeedleLitterColor,
+		GetMaterialSharedSampler(NeedleLitterColorSampler, View.SharedBilinearWrappedSampler), UV, W, Sign);
+	float3 LitterBase = lerp(BroadleafLitter, NeedleLitter * 0.72, ConiferShare);
+	Base += GreenBase * Organic.x + DryBase * Organic.y + LitterBase * LitterWeight - SoilBase * (GrassWeight + LitterWeight);
+	float3 GrassArmValue = F.Read(GrassArm, GrassArmSampler, UV, W, Sign);
+	float3 GrassDelta = F.Bump(GrassNormal, GrassNormalSampler, UV, W, Sign);
+	float3 DesertDelta = Delta + (SandDelta - SoilDelta) * Layers.z * Desert;
+	float3 SeasonalDelta = lerp(DesertDelta, GrassDelta, saturate(GrassWeight));
+	float3 SeasonalNormal = normalize(N + 0.35 * Detail * (SeasonalDelta - N * dot(SeasonalDelta, N)));
+	SurfaceNormal = normalize(float3(dot(SeasonalNormal, Tangent), dot(SeasonalNormal, Bitangent), dot(SeasonalNormal, N)));
+	SurfaceNormal = normalize(lerp(SurfaceNormal, float3(0, 0, 1), saturate(Snow + Ice) * 0.85));
+	float FrozenCover = saturate(Snow + Ice);
+	Base = Base * (1 - FrozenCover) + float3(0.78, 0.82, 0.86) * Snow + float3(0.35, 0.48, 0.58) * Ice;
+	Wet = max(Wet, Factors.y * Land * 0.6);
+	SurfaceRoughness = clamp(lerp(ARM.g, GrassArmValue.g, GrassWeight) * lerp(1, 0.7, Wet), 0.35, 1);
+	SurfaceRoughness = lerp(SurfaceRoughness, 0.85, Snow);
+	SurfaceRoughness = lerp(SurfaceRoughness, 0.3, Ice);
+}
+// 季節被覆・湿潤度を保つ最終色の返戻
+return saturate(Base * lerp(1, 0.64, Wet));

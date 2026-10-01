@@ -1,0 +1,170 @@
+[
+  {
+    "asset": "rock_face",
+    "map": "Diffuse",
+    "path": "SourceAssets/SurfaceTextures/rock_face_diffuse.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face/rock_face_diff_1k.jpg",
+    "bytes": 732721,
+    "sha256": "cce4b50517161264bdef196f5e247e328ca3739083cd6044ad3cc54d88cb82e2",
+    "source_page": "https://polyhaven.com/a/rock_face",
+    "authors": {
+      "Greg Zaal": "Photography",
+      "Dario Barresi": "Processing"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "rock_face",
+    "map": "nor_dx",
+    "path": "SourceAssets/SurfaceTextures/rock_face_nor_dx.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face/rock_face_nor_dx_1k.jpg",
+    "bytes": 1128181,
+    "sha256": "bb584355255d4680b63eb6627bb8dbb3fc8e213f875bc1c677de5468a9a0b5fe",
+    "source_page": "https://polyhaven.com/a/rock_face",
+    "authors": {
+      "Greg Zaal": "Photography",
+      "Dario Barresi": "Processing"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "rock_face",
+    "map": "arm",
+    "path": "SourceAssets/SurfaceTextures/rock_face_arm.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_face/rock_face_arm_1k.jpg",
+    "bytes": 458661,
+    "sha256": "3a0fce8658ba2bac6690f68e79630c16e004f1676c1588ef4d54906fc3907616",
+    "source_page": "https://polyhaven.com/a/rock_face",
+    "authors": {
+      "Greg Zaal": "Photography",
+      "Dario Barresi": "Processing"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "brown_mud",
+    "map": "Diffuse",
+    "path": "SourceAssets/SurfaceTextures/brown_mud_diffuse.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brown_mud/brown_mud_diff_1k.jpg",
+    "bytes": 501955,
+    "sha256": "df3f135c899f10a3b018738343b222cbc67d13e7c76c5d8da834a3d34c984417",
+    "source_page": "https://polyhaven.com/a/brown_mud",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "brown_mud",
+    "map": "nor_dx",
+    "path": "SourceAssets/SurfaceTextures/brown_mud_nor_dx.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brown_mud/brown_mud_nor_dx_1k.jpg",
+    "bytes": 1027535,
+    "sha256": "e8218c1ab4370d879cc3a1f1a72602714147c1f5fc2118d98945a85dc59e05fe",
+    "source_page": "https://polyhaven.com/a/brown_mud",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "brown_mud",
+    "map": "arm",
+    "path": "SourceAssets/SurfaceTextures/brown_mud_arm.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brown_mud/brown_mud_arm_1k.jpg",
+    "bytes": 224431,
+    "sha256": "40a5ac438f23ea454ff45f3f62f0fe4ac5b89c42fd070d10e7d41c51252caf88",
+    "source_page": "https://polyhaven.com/a/brown_mud",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "sand_01",
+    "map": "Diffuse",
+    "path": "SourceAssets/SurfaceTextures/sand_01_diffuse.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_01/sand_01_diff_1k.jpg",
+    "bytes": 485088,
+    "sha256": "a73b90eaa6d675ef57e7d48a8cf23e1f412e353ab2e29cf73930b8ecd4e76875",
+    "source_page": "https://polyhaven.com/a/sand_01",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "sand_01",
+    "map": "nor_dx",
+    "path": "SourceAssets/SurfaceTextures/sand_01_nor_dx.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_01/sand_01_nor_dx_1k.jpg",
+    "bytes": 885343,
+    "sha256": "585f5e2e72b8e8a74ff422b84454d97ed50fcb562d0b422dcd0922f0e07ba3ed",
+    "source_page": "https://polyhaven.com/a/sand_01",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "sand_01",
+    "map": "arm",
+    "path": "SourceAssets/SurfaceTextures/sand_01_arm.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sand_01/sand_01_arm_1k.jpg",
+    "bytes": 131275,
+    "sha256": "7a331aae0c26cfdba9096fc4fd0b8601d556b3e3ab92ddf4832a1c6a24a7292c",
+    "source_page": "https://polyhaven.com/a/sand_01",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "aerial_beach_01",
+    "map": "Diffuse",
+    "path": "SourceAssets/SurfaceTextures/aerial_beach_01_diffuse.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_beach_01/aerial_beach_01_diff_1k.jpg",
+    "bytes": 115382,
+    "sha256": "5b849983d08fda1c6d28b95b55851c2227697598721b25ff2b85e57cf8b04fc4",
+    "source_page": "https://polyhaven.com/a/aerial_beach_01",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  },
+  {
+    "asset": "aerial_beach_01",
+    "map": "nor_dx",
+    "path": "SourceAssets/SurfaceTextures/aerial_beach_01_nor_dx.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_beach_01/aerial_beach_01_nor_dx_1k.jpg",
+    "bytes": 264492,
+    "sha256": "95974daee18d2e5e82fae4c10fe2818c40342772bb64476399db55b29337f8d9",
+    "source_page": "https://polyhaven.com/a/aerial_beach_01",
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "license": "CC0-1.0",
+    "license_url": "https://polyhaven.com/license",
+    "resolution": "1k"
+  }
+]

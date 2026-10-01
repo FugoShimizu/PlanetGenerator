@@ -1,0 +1,47 @@
+{
+	"asset": "pine_tree_01",
+	"source_page": "https://polyhaven.com/a/pine_tree_01",
+	"authors": {
+		"modeling": "Rico Cilliers",
+		"photography": "Rob Tuytel"
+	},
+	"license": "CC0-1.0",
+	"license_url": "https://polyhaven.com/license",
+	"resolution": "1k",
+	"source_maps": [
+		{
+			"map": "diff",
+			"path": "SourceAssets/Vegetation/ConiferTwig/twig_diff.jpg",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_twig_diff_1k.jpg",
+			"bytes": 510932,
+			"sha256": "e649f0f9bc74d1af5f1a45eaf2fe7a29adaaddfab251f746b983da301e4b80e1"
+		},
+		{
+			"map": "alpha",
+			"path": "SourceAssets/Vegetation/ConiferTwig/twig_alpha.jpg",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_twig_alpha_1k.jpg",
+			"bytes": 195206,
+			"sha256": "bee10734c529a874570da6e4091758de5cc7dee17a359eeacd9c67fde1cb0947"
+		},
+		{
+			"map": "mask",
+			"path": "SourceAssets/Vegetation/ConiferTwig/twig_mask.jpg",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_tree_01/pine_tree_01_twig_mask_1k.jpg",
+			"bytes": 121552,
+			"sha256": "780336d808718212890ae857fc66a0d1acbbf48c744877527ef195827f2c9fe7"
+		}
+	],
+	"derived": {
+		"path": "SourceAssets/Vegetation/ConiferTwig/ConiferTwigCutout.png",
+		"bytes": 73691,
+		"sha256": "9207b0e1f60df569b48297a08824199aebe801c76ce894dbdd8dcaf74850d984",
+		"crop_pixels": [
+			660,
+			340,
+			980,
+			540
+		],
+		"opacity": "min(twig_alpha, twig_mask); values below 12 become transparent",
+		"generator": "Scripts/Assets/build_conifer_twig_texture.py"
+	}
+}

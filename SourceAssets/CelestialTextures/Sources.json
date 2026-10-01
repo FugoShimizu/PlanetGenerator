@@ -1,0 +1,15 @@
+{
+	"retrievedAt": "2026-09-17T06:43:25.547873+00:00",
+	"file": "lroc_color_2k.jpg",
+	"url": "https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_2k.jpg",
+	"source": "https://svs.gsfc.nasa.gov/4720/",
+	"credit": "NASA's Scientific Visualization Studio; Ernie Wright (USRA); LRO/LROC/LOLA teams",
+	"usage": "Public domain unless otherwise noted; no exception marked on this texture",
+	"usageSource": "https://svs.gsfc.nasa.gov/help/",
+	"bytes": 457942,
+	"sha256": "f7130a1822681fa7512d7dcfd40db8c10b9ba4f06777910348698260ed7a2170",
+	"imageModified": false,
+	"intendedUse": "Moon surface albedo for apparent sky disc; not a scientific lunar terrain model",
+	"importedIntoUnreal": true,
+	"unrealAsset": "/Game/Planet/Textures/T_MoonLroc"
+}

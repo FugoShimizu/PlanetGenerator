@@ -1,0 +1,45 @@
+{
+	"asset": "tree_small_02",
+	"source": "https://polyhaven.com/a/tree_small_02",
+	"license": "CC0-1.0",
+	"licenseSource": "https://polyhaven.com/license",
+	"resolution": "1k",
+	"modified": false,
+	"files": [
+		{
+			"path": "SourceAssets/Vegetation/TreeTextures/tree_small_02_leaves_diff_1k.jpg",
+			"map": "leaves_diff",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_small_02/tree_small_02_leaves_diff_1k.jpg",
+			"bytes": 340003,
+			"sha256": "261e7d7a5ac7d2e16ea8823ff8510be8f3f615999724232994039ad2885e5c36"
+		},
+		{
+			"path": "SourceAssets/Vegetation/TreeTextures/tree_small_02_leaves_alpha_1k.png",
+			"map": "leaves_alpha",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/png/1k/tree_small_02/tree_small_02_leaves_alpha_1k.png",
+			"bytes": 264711,
+			"sha256": "4f143e2dda8a6a572f427ac378b92255d21761e4611de0d26e21816c01aa533b"
+		},
+		{
+			"path": "SourceAssets/Vegetation/TreeTextures/tree_small_02_leaves_nor_dx_1k.jpg",
+			"map": "leaves_nor_dx",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_small_02/tree_small_02_leaves_nor_dx_1k.jpg",
+			"bytes": 665139,
+			"sha256": "cc65af13193717f32d0c6ec1a38274061df1a37c8458c250ef5eeb674c34ce75"
+		},
+		{
+			"path": "SourceAssets/Vegetation/TreeTextures/tree_small_02_branch_diff_1k.jpg",
+			"map": "branch_diff",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_small_02/tree_small_02_branch_diff_1k.jpg",
+			"bytes": 449977,
+			"sha256": "a71b768e330c0c6cca097e30314f6b4e842ef724a1370f6aab14b4434eec64cb"
+		},
+		{
+			"path": "SourceAssets/Vegetation/TreeTextures/tree_small_02_branch_nor_dx_1k.jpg",
+			"map": "branch_nor_dx",
+			"url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_small_02/tree_small_02_branch_nor_dx_1k.jpg",
+			"bytes": 584470,
+			"sha256": "bd56007b627e9e2e23cae6c113022427537cde7359db3ae8b4a548df113ce090"
+		}
+	]
+}
